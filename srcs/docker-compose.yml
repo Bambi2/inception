@@ -8,9 +8,9 @@ services:
       context: ./requirements/mariadb
       dockerfile: Dockerfile
       args:
-        USERNAME: ${USERNAME}
-        MARIADB_ROOT_PWD: ${MARIADB_ROOT_PWD}
-        MARIADB_USER_PWD: ${MARIADB_USER_PWD}
+        - USERNAME=${USERNAME}
+        - MARIADB_ROOT_PWD=${MARIADB_ROOT_PWD}
+        - MARIADB_USER_PWD=${MARIADB_USER_PWD}
     volumes:
       - mariadb:/var/lib/mysql
     expose:
