@@ -2,7 +2,6 @@
 #set -eux
 
 # sql commands to create user, update adming password and create wordpress database
-# TODO: add permissions of wordpress db to username
 cat << EOF > /tmp/init.sql
 USE mysql;
 FLUSH PRIVILEGES;
@@ -11,6 +10,7 @@ DROP DATABASE test;
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${MARIADB_ROOT_PWD}';
 CREATE DATABASE IF NOT EXISTS wordpress;
 CREATE USER '${USERNAME}'@'%' IDENTIFIED by '${MARIADB_USER_PWD}';
+GRANT ALL PRIVILEGES ON wordpress.* TO  '${USERNAME}'@'%';
 FLUSH PRIVILEGES;
 EOF
 
