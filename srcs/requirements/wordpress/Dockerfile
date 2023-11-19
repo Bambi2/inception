@@ -30,7 +30,7 @@ EXPOSE 9000
 
 # copy the script, give x-permissions
 COPY ./tools/wp-init.sh ./usr/local/bin
-RUN chmod +x ./usr/local/bin/wpscript.sh
+RUN chmod +x ./usr/local/bin/wp-init.sh
 
 # copy .conf in the fpm directory
 COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
