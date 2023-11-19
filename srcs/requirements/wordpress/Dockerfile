@@ -1,7 +1,7 @@
-FROM alpine:3.18
+FROM debian:buster
 
 # downloading php and configurating it so files are available for www-data user
-RUN apk update && apk upgrade && apk add --no-cache \
+RUN apt-get update && apt-get upgrade && apt-get install \
     wget \
     php7.3 \
     php-fpm \
