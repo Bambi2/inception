@@ -14,8 +14,8 @@ RUN apt-get install -y openssl
 
 # generate the keys
 RUN openssl req -x509 -nodes \
-    -out /etc/nginx/ssl/inception.crt \
-    -keyout /etc/nginx/ssl/inception.key \
+    -out /etc/nginx/ssl/mmalphit.42.fr.crt \
+    -keyout /etc/nginx/ssl/mmalphit.42.fr.key \
     -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42/CN=mmalphit.42.fr/UID=mmalphit"
 
 RUN mkdir -p /var/run/nginx
