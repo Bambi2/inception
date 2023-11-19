@@ -7,11 +7,11 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     php-fpm \
     php-mysql && \
     sed -i "s|listen = 127.0.0.1:9000|listen = 9000|g" \
-    /etc/php/7.3/php-fpm.d/www.conf && \
+    /etc/php/7.3/fpm/pool.d/www.conf && \
     sed -i "s|;listen.owner = www-data|listen.owner = www-data|g" \
-    /etc/php/7.3/php-fpm.d/www.conf && \
+    /etc/php/7.3/fpm/pool.d/www.conf && \
     sed -i "s|;listen.group = www-data|listen.group = www-data|g" \
-    /etc/php7.3/php-fpm.d/www.conf && \
+    /etc/php/7.3/fpm/pool.d/www.conf && \
     rm -f /var/cache/apk/*
 
 # downloading util/client for wordpress
