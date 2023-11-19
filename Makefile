@@ -1,10 +1,10 @@
 all: 
 	mkdir -p /home/mmalphit/data/mariadb
 	mkdir -p /home/mmalphit/data/wordpress
-	docker compose -f ./srcs/docker-compose.yml up -d --build
+	docker-compose -f ./srcs/docker-compose.yml up -d --build
 
 down:
-	docker compose -f ./docker-compose.yml down
+	docker-compose -f ./docker-compose.yml down
 
 clean:
 	docker container stop nginx mariadb wordpress
