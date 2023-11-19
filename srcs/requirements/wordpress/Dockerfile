@@ -1,7 +1,7 @@
 FROM debian:buster
 
 # downloading php and configurating it so files are available for www-data user
-RUN apt-get update && apt-get upgrade && apt-get install \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     wget \
     php7.3 \
     php-fpm \
