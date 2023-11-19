@@ -14,9 +14,6 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
 	&& chmod +x wp-cli.phar \
 	&& mv wp-cli.phar /usr/local/bin/wp
 
-# RUN apt-get update && apt-get install -y default-mysql-client
-# RUN apt-get install -y mariadb-client
-
 # download wp and its configs
 RUN wget https://wordpress.org/wordpress-6.1.1.tar.gz -P /var/www/html
 RUN cd /var/www/html \
@@ -32,10 +29,10 @@ RUN chmod -R 755 /var/www/*
 EXPOSE 9000
 
 # copy the script, give x-permissions
-COPY ./tools/wpscript.sh ./usr/local/bin
+COPY ./tools/wp-init.sh ./usr/local/bin
 RUN chmod +x ./usr/local/bin/wpscript.sh
 
 # copy .conf in the fpm directory
 COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
 
-ENTRYPOINT ["/usr/local/bin/wpscript.sh"]
+ENTRYPOINT ["/usr/local/bin/wp-init.sh"]
