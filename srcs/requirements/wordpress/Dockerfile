@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM alpine:3.18
 
 # downloading php and configurating it so files are available for www-data user
 RUN apk update && apk upgrade && apk add --no-cache \
