@@ -1,25 +1,23 @@
 FROM debian:buster
 
-# downloading php and configurating it so files are available for www-data user
-RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y \
+    bash \
     wget \
     php7.3 \
     php-fpm \
-    php-mysql && \
-    sed -i "s|listen = 127.0.0.1:9000|listen = 9000|g" \
-    /etc/php/7.3/fpm/pool.d/www.conf && \
-    sed -i "s|;listen.owner = www-data|listen.owner = www-data|g" \
-    /etc/php/7.3/fpm/pool.d/www.conf && \
-    sed -i "s|;listen.group = www-data|listen.group = www-data|g" \
-    /etc/php/7.3/fpm/pool.d/www.conf && \
-    rm -f /var/cache/apk/*
+    php-mysql
 
-# downloading util/client for wordpress
+# a command-line interface for WordPress
+# to install wp_cli and place it in /usr/local/bin
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
 	&& chmod +x wp-cli.phar \
 	&& mv wp-cli.phar /usr/local/bin/wp
 
-# downloading wordpress and put it to /var/www/html
+# RUN apt-get update && apt-get install -y default-mysql-client
+# RUN apt-get install -y mariadb-client
+
+# download wp and its configs
 RUN wget https://wordpress.org/wordpress-6.1.1.tar.gz -P /var/www/html
 RUN cd /var/www/html \
 	&& tar -xzf /var/www/html/wordpress-6.1.1.tar.gz \
@@ -34,7 +32,10 @@ RUN chmod -R 755 /var/www/*
 EXPOSE 9000
 
 # copy the script, give x-permissions
-COPY ./tools/wp-init.sh ./usr/local/bin
-RUN chmod +x ./usr/local/bin/wp-init.sh
+COPY ./tools/wpscript.sh ./usr/local/bin
+RUN chmod +x ./usr/local/bin/wpscript.sh
 
-ENTRYPOINT ["/usr/local/bin/wp-init.sh"]
+# copy .conf in the fpm directory
+COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
+
+ENTRYPOINT ["/usr/local/bin/wpscript.sh"]
