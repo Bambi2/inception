@@ -1,4 +1,4 @@
-ROM debian:buster
+FROM debian:buster
 
 # downloading php and configurating it so files are available for www-data user
 RUN apk update && apk upgrade && apk add --no-cache \
