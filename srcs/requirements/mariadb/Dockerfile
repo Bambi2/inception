@@ -1,25 +1,29 @@
-FROM alpine:3.18
+FROM debian:buster
 
-# Arguments for building
-ARG USERNAME
-ARG MARIADB_ROOT_PWD
-ARG MARIADB_USER_PWD
+# install MariaDB and other dependencies
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y \
+        mariadb-server \
+        mariadb-client \
+        procps
 
-# Downloading MariaDB
-RUN apk update && apk add --no-cache mariadb mariadb-client
+# copy the provided config file to the container
+COPY ./conf/my.cnf /etc/mysql/mariadb.conf.d/my.cnf
 
-# Initializing database directory
-RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
+# Allow to run the daemon of mysql
+# re-create /var/lib/mysql with appropriate ownership
+# ensure that /var/run/mysqld (used for socket and 
+# lock files) is writable
+RUN mkdir -p /var/run/mysqld
+RUN mkdir -p /var/lib/mysql
+RUN chown mysql:mysql /var/run/mysqld/
+RUN chmod -R 755 /var/run/mysqld/
+RUN chown mysql:mysql /var/lib/mysql/
+RUN chmod -R 755 /var/lib/mysql/
 
-# Giving mysql user access to var/run/mysqld so mariadb can use it during runtine
-RUN mkdir -p /var/run/mysqld && chown mysql:mysql /var/run/mysqld/ && chmod -R 755 /var/run/mysqld/
+EXPOSE 3306
 
-# Initializing db with a script
-COPY ./tools/init.sh .
-RUN sh init.sh && rm init.sh
+COPY ./tools/init.sh ./usr/local/bin
+RUN chmod +x ./usr/local/bin/init.sh
 
-# Setting a user to run the server
-USER mysql
-
-# Running the server
-CMD ["/usr/bin/mysqld", "--skip-networking=OFF"]
+ENTRYPOINT ["/usr/local/bin/init.sh"]
