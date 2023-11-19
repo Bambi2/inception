@@ -4,7 +4,7 @@
 cd /var/www/html/wordpress
 
 if ! wp core is-installed; then
-wp config create	--allow-root --dbname=wordpress \
+wp config create	--allow-root --dbname=${MARIADB_DATABASE} \
 			--dbuser=${USERNAME} \
 			--dbpass=${MARIADB_USER_PWD} \
 			--dbhost=${MARIADB_HOST} \
