@@ -12,7 +12,7 @@ RUN apk update && apk upgrade && apk add --no-cache \
     /etc/php8/php-fpm.d/www.conf && \
     sed -i "s|;listen.group = www-data|listen.group = www-data|g" \
     /etc/php8/php-fpm.d/www.conf && \
-    && rm -f /var/cache/apk/*
+    rm -f /var/cache/apk/*
 
 # downloading util/client for wordpress
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
