@@ -5,13 +5,13 @@ RUN apk update && apk upgrade && apk add --no-cache \
     wget \
     php7.3 \
     php-fpm \
-    php-mysql \
+    php-mysql && \
     sed -i "s|listen = 127.0.0.1:9000|listen = 9000|g" \
-    /etc/php8/php-fpm.d/www.conf \
+    /etc/php8/php-fpm.d/www.conf && \
     sed -i "s|;listen.owner = www-data|listen.owner = www-data|g" \
-    /etc/php8/php-fpm.d/www.conf \
+    /etc/php8/php-fpm.d/www.conf && \
     sed -i "s|;listen.group = www-data|listen.group = www-data|g" \
-    /etc/php8/php-fpm.d/www.conf \
+    /etc/php8/php-fpm.d/www.conf && \
     && rm -f /var/cache/apk/*
 
 # downloading util/client for wordpress
