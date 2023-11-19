@@ -8,7 +8,7 @@ RUN apt-get install -y \
         procps
 
 # copy the provided config file to the container
-COPY ./conf/my.cnf /etc/mysql/mariadb.conf.d/my.cnf
+COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 
 # Allow to run the daemon of mysql
 # re-create /var/lib/mysql with appropriate ownership
