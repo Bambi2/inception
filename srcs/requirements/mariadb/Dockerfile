@@ -1,7 +1,11 @@
-FROM alpine:3.18
+FROM debian:buster
 
 # Downloading MariaDB
-RUN apk update && apk add --no-cache mariadb mariadb-client procps
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y \
+        mariadb-server \
+        mariadb-client \
+        procps
 
 # Initializing database directory
 RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql

@@ -9,3 +9,8 @@ mysql -e "CREATE USER IF NOT EXISTS \`${USERNAME}\`@'localhost' IDENTIFIED BY '$
 mysql -e "GRANT ALL PRIVILEGES ON \`${MARIADB_DATABASE}\`.* TO \`${USERNAME}\`@'%' IDENTIFIED BY '${MARIADB_USER_PWD}';"
 mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MARIADB_ROOT_PWD}';"
 mysql -e "FLUSH PRIVILEGES;"
+
+mysqladmin -u root -p${SQL_ROOT_PASSWORD} shutdown
+
+#mysqladmin -u root shutdown
+exec mysqld_safe
