@@ -1,10 +1,5 @@
 FROM alpine:3.18
 
-# Arguments for building
-ARG USERNAME
-ARG MARIADB_ROOT_PWD
-ARG MARIADB_USER_PWD
-
 # Downloading MariaDB
 RUN apk update && apk add --no-cache mariadb mariadb-client
 
@@ -15,11 +10,11 @@ RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
 RUN mkdir -p /var/run/mysqld && chown mysql:mysql /var/run/mysqld/ && chmod -R 755 /var/run/mysqld/
 
 # Initializing db with a script
-COPY ./tools/init.sh .
-RUN sh init.sh && rm init.sh
+COPY ./tools/init.sh ./usr/local/bin
+RUN chmod +x ./usr/local/bin/init.sh
 
 # Setting a user to run the server
 USER mysql
 
 # Running the server
-CMD ["/usr/bin/mysqld", "--skip-networking=OFF"]
+ENTRYPOINT ["/usr/local/bin/init.sh"]
