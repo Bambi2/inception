@@ -13,6 +13,8 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
         fi
 fi
 
+if [ ! -d "/var/lib/mysql/wordpress" ]; then
+
 # sql commands to create user, update adming password and create wordpress database
 cat << EOF > /tmp/init.sql
 USE mysql;
@@ -31,3 +33,5 @@ EOF
 # run sql script
 /usr/bin/mysqld --user=mysql --bootstrap < /tmp/init.sql
 rm -f /tmp/init.sql
+
+fi
