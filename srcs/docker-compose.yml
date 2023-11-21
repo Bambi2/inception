@@ -2,7 +2,6 @@ version: '3'
 
 services:
   mariadb:
-    image: mariadb
     container_name: mariadb
     build:
       context: ./requirements/mariadb
@@ -11,16 +10,16 @@ services:
         USERNAME: ${USERNAME}
         MARIADB_ROOT_PWD: ${MARIADB_ROOT_PWD}
         MARIADB_USER_PWD: ${MARIADB_USER_PWD}
+        MARIADB_DATABASE: ${MARIADB_DATABASE}
     volumes:
       - mariadb:/var/lib/mysql
-    expose:
-      - "3306"
+    ports:
+      - "3306:3306"
     networks:
       - inception
     restart: unless-stopped
 
   wordpress:
-    image: wordpress
     container_name: wordpress
     build:
       context: ./requirements/wordpress
@@ -36,7 +35,6 @@ services:
       - mariadb
 
   nginx:
-    image: nginx
     container_name: nginx
     build:
       context: ./requirements/nginx

@@ -1,9 +1,9 @@
 FROM alpine:3.16
 
 # Arguments for building
-ARG USERNAME
-ARG MARIADB_ROOT_PWD
-ARG MARIADB_USER_PWD
+ARG USERNAME \
+    MARIADB_ROOT_PWD \
+    MARIADB_USER_PWD
 
 RUN apk update && apk add --no-cache mariadb mariadb-client
 
