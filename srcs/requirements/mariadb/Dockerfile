@@ -18,6 +18,11 @@ RUN mkdir -p /var/run/mysqld && chown mysql:mysql /var/run/mysqld/ && chmod -R 7
 COPY ./tools/init.sh .
 RUN sh init.sh && rm init.sh
 
+RUN sudo chmod 755 /var/run/mysqld/ 
+RUN sudo chown mysql:mysql /var/run/mysqld/ 
+RUN sudo chmod 755 /var/run/mysqld/mysqld.sock 
+RUN sudo chown mysql:mysql /var/run/mysqld/mysqld.sock 
+
 # Setting a user to run the server
 USER mysql
 
