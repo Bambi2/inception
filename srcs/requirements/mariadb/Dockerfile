@@ -1,7 +1,7 @@
 FROM alpine:3.18
 
 # Downloading MariaDB
-RUN apk update && apk add --no-cache mariadb mariadb-client
+RUN apk update && apk add --no-cache mariadb mariadb-client procps
 
 # Initializing database directory
 RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
