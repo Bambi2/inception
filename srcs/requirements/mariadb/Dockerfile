@@ -13,8 +13,5 @@ RUN mkdir -p /var/run/mysqld && chown mysql:mysql /var/run/mysqld/ && chmod -R 7
 COPY ./tools/init.sh ./usr/local/bin
 RUN chmod +x ./usr/local/bin/init.sh
 
-# Setting a user to run the server
-USER mysql
-
 # Running the server
 ENTRYPOINT ["/usr/local/bin/init.sh"]
