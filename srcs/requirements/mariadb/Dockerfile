@@ -1,27 +1,25 @@
-FROM alpine:3.16
+FROM alpine:3.18
 
 # Arguments for building
-ARG USERNAME \
-    MARIADB_ROOT_PWD \
-    MARIADB_USER_PWD
+ARG USERNAME
+ARG MARIADB_ROOT_PWD
+ARG MARIADB_USER_PWD
 
+# Downloading MariaDB
 RUN apk update && apk add --no-cache mariadb mariadb-client
 
-RUN mkdir /var/run/mysqld; \
-    chmod 777 /var/run/mysqld; \
-    { echo '[mysqld]'; \
-      echo 'skip-host-cache'; \
-      echo 'skip-name-resolve'; \
-      echo 'bind-address=0.0.0.0'; \
-    } | tee  /etc/my.cnf.d/docker.cnf; \
-    sed -i "s|skip-networking|skip-networking=0|g" \
-      /etc/my.cnf.d/mariadb-server.cnf
-
+# Initializing database directory
 RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
-EXPOSE 3306
+# Giving mysql user access to var/run/mysqld so mariadb can use it during runtine
+RUN mkdir -p /var/run/mysqld && chown mysql:mysql /var/run/mysqld/ && chmod -R 755 /var/run/mysqld/
 
+# Initializing db with a script
 COPY ./tools/init.sh .
 RUN sh init.sh && rm init.sh
+
+# Setting a user to run the server
 USER mysql
-CMD ["/usr/bin/mysqld", "--skip-log-error"]
+
+# Running the server
+CMD ["/usr/bin/mysqld", "--skip-networking=OFF"]
