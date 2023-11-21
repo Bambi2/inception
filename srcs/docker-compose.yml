@@ -5,7 +5,7 @@ services:
     container_name: nginx
     build: ./requirements/nginx
     depends_on:
-      - wordrpress
+      - wordpress
       - 443:443
     volumes:
       - wordpress_data:/var/www/html
