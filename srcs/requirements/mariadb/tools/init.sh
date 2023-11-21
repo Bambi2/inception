@@ -1,7 +1,7 @@
 #!bin/sh
 #set -eux
 
-service mysql start;
+sudo service mysql start;
 
 # log into MariaDB as root and create database and the user
 mysql -e "CREATE DATABASE IF NOT EXISTS \`${MARIADB_DATABASE}\`;"
