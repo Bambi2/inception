@@ -1,64 +1,62 @@
 version: '3'
 
 services:
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    depends_on:
+      - wordrpress
+      - 443:443
+    volumes:
+      - wordpress_data:/var/www/html
+    restart: always
+    networks:
+      - network
+
   mariadb:
     container_name: mariadb
-    build:
-      context: ./requirements/mariadb
-      dockerfile: Dockerfile
+    build: ./requirements/mariadb
+    #volumes allow to store in a persistent disk the content in a local disk
+    #db_data is a volume created by docker directly
     volumes:
-      - mariadb:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
+    # in case of problem we restart automatically the container
     networks:
-      - inception
+      - network
     restart: always
     env_file:
       - .env
-
 
   wordpress:
     container_name: wordpress
+    #Create a depedency between the 2 container, db will be launched before
+    depends_on:
+      - mariadb
     build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
-    volumes:
-      - wordpress:/var/www/html/wordpress
-    networks:
-      - inception
     restart: always
-    depends_on:
-      - mariadb
     env_file:
       - .env
-
-  nginx:
-    container_name: nginx
-    build:
-      context: ./requirements/nginx
-      dockerfile: Dockerfile
     volumes:
-      - wordpress:/var/www/html/wordpress
-    depends_on:
-      - wordpress
-    ports:
-      - "443:443"
+      - wordpress_data:/var/www/html
     networks:
-      - inception
-    restart: unless-stopped
-    
+      - network
+
 volumes:
-  mariadb:
+  mariadb_data:
     driver: local
     driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/home/mmalphit/data/mariadb'
-  wordpress:
+      type: none
+      device: /home/mmalphit/data/mysql
+      o: bind
+  wordpress_data:
     driver: local
     driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/home/mmalphit/data/wordpress'
+      type: none
+      device: /home/mmalphit/data/wordpress
+      o: bind
 
 networks:
-  inception:
-    name: inception
+  network:
+    driver: bridge

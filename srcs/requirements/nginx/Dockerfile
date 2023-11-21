@@ -1,36 +1,24 @@
-FROM debian:buster
+FROM	debian:buster
 
-# install NGINX, vim, curl and openssl
-RUN apt-get update -y 
-RUN apt-get install -y nginx
-RUN apt-get install -y vim
-RUN apt-get install -y curl
+#install all the program
+RUN		apt-get update
+RUN		apt-get install -y nginx \
+                openssl
 
 # nginx SSL
-# create a directory to store certificates and keys
-RUN mkdir -p /etc/nginx/ssl
+RUN mkdir /etc/nginx/ssl
+RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
+       -out /etc/nginx/ssl/mmalphit.crt \
+       -keyout /etc/nginx/ssl/mmalphit.key \
+       -subj "/C=FR/ST=Paris/L=Paris/O=42 School/OU=mmalphit/CN=mmalphit/"
 
-RUN apt-get install -y openssl
+COPY ./conf/nginx.conf /etc/nginx/conf.d
 
-# generate the keys
-RUN openssl req -x509 -nodes \
-    -out /etc/nginx/ssl/mmalphit.42.fr.crt \
-    -keyout /etc/nginx/ssl/mmalphit.42.fr.key \
-    -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=42/CN=mmalphit.42.fr/UID=mmalphit"
+# nginx config
+RUN mkdir -p /run/nginx
 
-RUN mkdir -p /var/run/nginx
-RUN chmod 755 /var/www/html
-RUN chown -R www-data:www-data /var/www/html
+#the only port allowed
+EXPOSE	443
 
-# copy the provided config file to the container
-COPY ./conf/nginx.conf /etc/nginx/nginx.conf
-
-# port 443
-EXPOSE  443
-
-# launch nginx
-# set the default command to be run when
-# container is started from the Docker image
-# "-g" specifies that nginx should be run 
-# with configuration "daemon off" (e g in foreground)
+# Start nginx
 CMD ["nginx", "-g", "daemon off;"]

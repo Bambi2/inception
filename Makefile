@@ -16,4 +16,4 @@ fclean: clean
 
 re: fclean all
 
-.Phony: all logs clean fclean re display
+.PHONY: all re down clean
