@@ -1,8 +1,19 @@
 #!bin/sh
-#set -eux
+
+if [ ! -d "/var/lib/mysql/mysql" ]; then
+
+        chown -R mysql:mysql /var/lib/mysql
+
+        # init database
+        mysql_install_db --basedir=/usr --datadir=/var/lib/mysql --user=mysql --rpm
+
+        tfile=`mktemp`
+        if [ ! -f "$tfile" ]; then
+                return 1
+        fi
+fi
 
 # sql commands to create user, update adming password and create wordpress database
-# TODO: add permissions of wordpress db to username
 cat << EOF > /tmp/init.sql
 USE mysql;
 FLUSH PRIVILEGES;
