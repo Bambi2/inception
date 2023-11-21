@@ -5,26 +5,23 @@ ARG USERNAME
 ARG MARIADB_ROOT_PWD
 ARG MARIADB_USER_PWD
 
-# Downloading MariaDB
 RUN apk update && apk add --no-cache mariadb mariadb-client
 
-# Initializing database directory
+RUN mkdir /var/run/mysqld; \
+    chmod 777 /var/run/mysqld; \
+    { echo '[mysqld]'; \
+      echo 'skip-host-cache'; \
+      echo 'skip-name-resolve'; \
+      echo 'bind-address=0.0.0.0'; \
+    } | tee  /etc/my.cnf.d/docker.cnf; \
+    sed -i "s|skip-networking|skip-networking=0|g" \
+      /etc/my.cnf.d/mariadb-server.cnf
+
 RUN mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
-# Giving mysql user access to var/run/mysqld so mariadb can use it during runtine
-RUN mkdir -p /var/run/mysqld && chown mysql:mysql /var/run/mysqld/ && chmod -R 755 /var/run/mysqld/
+EXPOSE 3306
 
-# Initializing db with a script
-COPY ./tools/init.sh .
-RUN sh init.sh && rm init.sh
-
-RUN chmod 755 /var/run/mysqld/ 
-RUN chown mysql:mysql /var/run/mysqld/ 
-RUN chmod 755 /var/run/mysqld/mysqld.sock 
-RUN chown mysql:mysql /var/run/mysqld/mysqld.sock 
-
-# Setting a user to run the server
+COPY requirements/mariadb/conf/create_db.sh .
+RUN sh create_db.sh && rm create_db.sh
 USER mysql
-
-# Running the server
-CMD ["/usr/bin/mysqld", "--skip-networking=OFF"]
+CMD ["/usr/bin/mysqld", "--skip-log-error"]
