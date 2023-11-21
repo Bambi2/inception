@@ -8,11 +8,12 @@ services:
       dockerfile: Dockerfile
     volumes:
       - mariadb:/var/lib/mysql
-    ports:
-      - "3306:3306"
     networks:
       - inception
-    restart: unless-stopped
+    restart: always
+    env_file:
+      - .env
+
 
   wordpress:
     container_name: wordpress
@@ -21,13 +22,13 @@ services:
       dockerfile: Dockerfile
     volumes:
       - wordpress:/var/www/html/wordpress
-    expose:
-      - "9000"
     networks:
       - inception
-    restart: unless-stopped
+    restart: always
     depends_on:
       - mariadb
+    env_file:
+      - .env
 
   nginx:
     container_name: nginx
