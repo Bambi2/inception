@@ -1,19 +1,20 @@
-#!/bin/bash
+#!bin/sh
 #set -eux
 
-service mysql start;
+# sql commands to create user, update adming password and create wordpress database
+# TODO: add permissions of wordpress db to username
+cat << EOF > /tmp/init.sql
+USE mysql;
+FLUSH PRIVILEGES;
+DELETE FROM mysql.user WHERE User='';
+DROP DATABASE test;
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${MARIADB_ROOT_PWD}';
+CREATE DATABASE ${MARIADB_DATABASE} CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE USER '${USERNAME}'@'%' IDENTIFIED by '${MARIADB_USER_PWD}';
+GRANT ALL PRIVILEGES ON wordpress.* TO '${USERNAME}'@'%';
+FLUSH PRIVILEGES;
+EOF
 
-# log into MariaDB as root and create database and the user
-mysql -e "CREATE DATABASE IF NOT EXISTS \`${MARIADB_DATABASE}\`;"
-mysql -e "CREATE USER IF NOT EXISTS \`${USERNAME}\`@'localhost' IDENTIFIED BY '${MARIADB_USER_PWD}';"
-mysql -e "GRANT ALL PRIVILEGES ON \`${MARIADB_DATABASE}\`.* TO \`${USERNAME}\`@'%' IDENTIFIED BY '${MARIADB_USER_PWD}';"
-mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MARIADB_ROOT_PWD}';"
-mysql -e "FLUSH PRIVILEGES;"
-
-mysqladmin -u root -p${MARIADB_ROOT_PWD} shutdown
-
-#mysqladmin -u root shutdown
-exec mysqld_safe
-
-#print status
-echo "MariaDB database and user were created successfully! "
+# run sql script
+/usr/bin/mysqld --user=mysql --bootstrap < /tmp/init.sql
+rm -f /tmp/init.sql

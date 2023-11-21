@@ -1,7 +1,7 @@
 all: 
 	mkdir -p /home/mmalphit/data/mariadb
 	mkdir -p /home/mmalphit/data/wordpress
-	docker-compose -f ./srcs/docker-compose.yml up -d --build
+	docker-compose -f ./srcs/docker-compose.yml --env-file srcs/.env up -d
 
 down:
 	docker-compose -f ./srcs/docker-compose.yml down
