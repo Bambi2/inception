@@ -1,4 +1,4 @@
-FROM alpine:3.18
+FROM alpine:3.16
 
 # Arguments for building
 ARG USERNAME
