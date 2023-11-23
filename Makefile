@@ -1,5 +1,5 @@
 all:
-	mkdir -p /home/mmalphit/data/mariadb
+	mkdir -p /home/mmalphit/data/mysql
 	mkdir -p /home/mmalphit/data/wordpress
 	docker-compose -f ./srcs/docker-compose.yml up -d --build
 
