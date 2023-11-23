@@ -15,11 +15,6 @@ RUN mkdir -p /var/run/mysqld \
 
 EXPOSE 3306
 
-#COPY		./conf/mysqld.conf ~/my.cnf
-#COPY		./conf/mysqld.conf /etc/mysql/my.cnf
-#COPY		./conf/mysqld.conf /etc/my.cnf
-
-
 #Copy of the .sh and .sql in the /bin of the container to be able to run the program
 # Give the right to execute + launch the .sh
 COPY ./tools/mariadb.sh /usr/local/bin/
