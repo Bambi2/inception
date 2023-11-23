@@ -2,6 +2,7 @@ version: '3'
 
 services:
   nginx:
+    image: nginx
     container_name: nginx
     build: ./requirements/nginx
     depends_on:
@@ -15,6 +16,7 @@ services:
       - network
 
   mariadb:
+    image: mariadb
     container_name: mariadb
     build: ./requirements/mariadb
     #volumes allow to store in a persistent disk the content in a local disk
@@ -29,6 +31,7 @@ services:
       - .env
 
   wordpress:
+    image: wordpress
     container_name: wordpress
     #Create a depedency between the 2 container, db will be launched before
     depends_on:

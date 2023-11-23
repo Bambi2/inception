@@ -12,7 +12,7 @@ then
 	echo "Database already exists"
 else
 
-# Set root option so that connexion without root password is not possible
+# Set root option so that connexion without root password is impossible
 
 mysql_secure_installation << _EOF_
 

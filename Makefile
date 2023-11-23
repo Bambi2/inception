@@ -12,9 +12,7 @@ clean:
 	docker rmi -f $$(docker images -qa);\
 	docker volume rm $$(docker volume ls -q);\
 	docker network rm $$(docker network ls -q);\
-	@sudo rm -rf /home/mmalphit/data/mariadb/*; \
-    @sudo rm -rf /home/mmalphit/data/wordpress/*
-
-re: fclean all
+	sudo rm -rf /home/mmalphit/data/mariadb/*; \
+    sudo rm -rf /home/mmalphit/data/wordpress/*
 
 .PHONY: all re down clean
